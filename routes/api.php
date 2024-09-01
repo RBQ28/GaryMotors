@@ -23,7 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index']);
     Route::post('/', [AdminController::class, 'store']);
-    Route::get('/{id}', [AdminController::class, 'show']);
-    Route::put('/{id}', [AdminController::class, 'update']);
-    Route::delete('/{id}', [AdminController::class, 'destroy']);
+    Route::get('{id}', [AdminController::class, 'show']);
+    Route::put('{id}', [AdminController::class, 'update']);  // Corrección aquí
+    Route::delete('{id}', [AdminController::class, 'destroy']);
 });
+
+

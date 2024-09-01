@@ -25,25 +25,28 @@ class AdminController extends Controller
     {
         // Validar los datos de entrada
         $validatedData = $request->validate([
-            'nombre' => 'required|string|max:255',
+            'nombre' => 'required|string|regex:/^[A-Za-z]+[0-9]{6}$/',
             'email' => 'required|string|email|max:255|unique:admins',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8', // Eliminamos 'confirmed'
         ]);
-
+    
         // Crear una nueva instancia de Admin
         $admin = new Admin();
         $admin->nombre = $validatedData['nombre'];
         $admin->email = $validatedData['email'];
         // Hash de la contraseña antes de guardarla
         $admin->password = bcrypt($validatedData['password']);
-
+    
         // Guardar el nuevo administrador en la base de datos
         $admin->save();
-
-        // Opcionalmente, puedes redirigir a una página o devolver una respuesta
-        return redirect()->route('admin.index')->with('success', 'Administrador creado con éxito.');
+    
+        // Devolver una respuesta JSON
+        return response()->json([
+            'message' => 'Administrador creado con éxito.',
+            'admin' => $admin
+        ], 201); // 201 indica que el recurso fue creado exitosamente
     }
-
+    
     /**
      * Display the specified resource.
      */
@@ -56,34 +59,34 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         // Validar los datos de entrada
         $validatedData = $request->validate([
-            'nombre' => 'required|string|max:255',
+            'nombre' => 'required|string|regex:/^[A-Za-z]+[0-9]{6}$/',
             'email' => 'required|string|email|max:255|unique:admins,email,' . $id,
-            'password' => 'nullable|string|min:8|confirmed',
+            'password' => 'required|string|min:8|confirmed',
         ]);
-
+    
         // Encontrar el administrador por ID
-        $Admin = Admin::findOrFail($id);
-
-        // Actualizar los campos con los datos validados
-        $Admin->nombre = $validatedData['nombre'];
-        $Admin->email = $validatedData['email'];
-
-        // Solo actualizar la contraseña si se proporciona una nueva
-        if (!empty($validatedData['password'])) {
-            $Admin->password = bcrypt($validatedData['password']);
-        }
-
-        // Guardar los cambios en la base de datos
-        $Admin->save();
-
-        // Opcionalmente, puedes redirigir a una página o devolver una respuesta
-        return redirect()->route('Admin.index')->with('success', 'Administrador actualizado con éxito.');
+        $admin = Admin::findOrFail($id);
+    
+        // Actualizar los datos del administrador
+        $admin->nombre = $validatedData['nombre'];
+        $admin->email = $validatedData['email'];
+        $admin->password = bcrypt($validatedData['password']);
+    
+        // Guardar los cambios
+        $admin->save();
+    
+        // Devolver el administrador actualizado en la respuesta
+        return response()->json([
+            'message' => 'Administrador actualizado con éxito.',
+            'admin' => $admin
+        ], 200);
     }
-
+    
+    
     /**
      * Remove the specified resource from storage.
      */
