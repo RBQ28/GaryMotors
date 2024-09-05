@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\PiezaController;
+use App\Http\Controllers\Api\TipoPiezaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,4 +30,20 @@ Route::prefix('admin')->group(function () {
     Route::delete('{id}', [AdminController::class, 'destroy']);
 });
 
+//Rutas para TipoPieza
+Route::prefix('tipos_piezas')->group(function (){
+    Route::get('/',[TipoPiezaController::class, 'index']);
+    Route::post('/',[TipoPiezaController::class, 'store']);
+    Route::get('{id}',[TipoPiezaController::class, 'show']);
+    Route::put('{id}',[TipoPiezaController::class, 'update']);
+    Route::delete('{id}',[TipoPiezaController::class, 'destroy']);
+});
 
+//Rutas para Piezas
+Route::prefix('piezas')->group(function (){
+    Route::get('/',[PiezaController::class, 'index']);
+    Route::post('/',[PiezaController::class, 'store']);
+    Route::get('{id}',[PiezaController::class, 'show']);
+    Route::put('{id}',[PiezaController::class, 'update']);
+    Route::delete('{id}',[PiezaController::class, 'destroy']);
+});
