@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\FormularioContactoController;
 use App\Http\Controllers\Api\PiezaController;
 use App\Http\Controllers\Api\TipoPiezaController;
 use Illuminate\Http\Request;
@@ -46,4 +47,13 @@ Route::prefix('piezas')->group(function (){
     Route::get('{id}',[PiezaController::class, 'show']);
     Route::put('{id}',[PiezaController::class, 'update']);
     Route::delete('{id}',[PiezaController::class, 'destroy']);
+});
+
+// Rutas para el formulario de contacto
+Route::prefix('contactos')->group(function () {
+    Route::get('/', [FormularioContactoController::class, 'index']);
+    Route::post('/', [FormularioContactoController::class, 'store']);
+    Route::get('{id}', [FormularioContactoController::class, 'show']);
+    Route::put('{id}', [FormularioContactoController::class, 'update']);
+    Route::delete('{id}', [FormularioContactoController::class, 'destroy']);
 });
