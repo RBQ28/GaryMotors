@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\FormularioContactoController;
+use App\Http\Controllers\Api\MotosController;
 use App\Http\Controllers\Api\PiezaController;
 use App\Http\Controllers\Api\TipoPiezaController;
 use Illuminate\Http\Request;
@@ -56,4 +57,12 @@ Route::prefix('contactos')->group(function () {
     Route::get('{id}', [FormularioContactoController::class, 'show']);
     Route::put('{id}', [FormularioContactoController::class, 'update']);
     Route::delete('{id}', [FormularioContactoController::class, 'destroy']);
+});
+
+Route::prefix('motos')->group(function () {
+    Route::get('/', [MotosController::class, 'index']);
+    Route::post('/', [MotosController::class, 'store']);
+    Route::get('{id}', [MotosController::class, 'show']);
+    Route::put('{id}', [MotosController::class, 'update']);
+    Route::delete('{id}', [MotosController::class, 'destroy']);
 });
