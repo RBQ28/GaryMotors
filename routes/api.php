@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\AccesorioController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\FormularioContactoController;
 use App\Http\Controllers\Api\MotosController;
 use App\Http\Controllers\Api\PiezaController;
+use App\Http\Controllers\Api\TipoAccesorioController;
 use App\Http\Controllers\Api\TipoPiezaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -65,4 +67,20 @@ Route::prefix('motos')->group(function () {
     Route::get('{id}', [MotosController::class, 'show']);
     Route::put('{id}', [MotosController::class, 'update']);
     Route::delete('{id}', [MotosController::class, 'destroy']);
+});
+
+Route::prefix('tipo_accesorio')->group(function () {
+    Route::get('/', [TipoAccesorioController::class, 'index']);
+    Route::post('/', [TipoAccesorioController::class, 'store']);
+    Route::get('{id}', [TipoAccesorioController::class, 'show']);
+    Route::put('{id}', [TipoAccesorioController::class, 'update']);
+    Route::delete('{id}', [TipoAccesorioController::class, 'destroy']);
+});
+
+Route::prefix('accesorio')->group(function () {
+    Route::get('/', [AccesorioController::class, 'index']);
+    Route::post('/', [AccesorioController::class, 'store']);
+    Route::get('{id}', [AccesorioController::class, 'show']);
+    Route::put('{id}', [AccesorioController::class, 'update']);
+    Route::delete('{id}', [AccesorioController::class, 'destroy']);
 });
