@@ -1,5 +1,5 @@
 <?php
-
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use App\Http\Controllers\Api\AccesorioController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\FormularioContactoController;
@@ -25,14 +25,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware([EnsureFrontendRequestsAreStateful::class, 'auth:sanctum'])->group(function () {
+    // Rutas protegidas aquí
+});
+
 // Rutas para Admin
 Route::prefix('admin')->group(function () {
+    Route::post('/login', [AdminController::class, 'login']); // Para el login
     Route::get('/', [AdminController::class, 'index']);
     Route::post('/', [AdminController::class, 'store']);
     Route::get('{id}', [AdminController::class, 'show']);
     Route::put('{id}', [AdminController::class, 'update']);  // Corrección aquí
     Route::delete('{id}', [AdminController::class, 'destroy']);
 });
+
 
 //Rutas para TipoPieza
 Route::prefix('tipos_piezas')->group(function (){
