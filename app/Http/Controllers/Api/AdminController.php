@@ -11,23 +11,7 @@ use Illuminate\Http\JsonResponse;
 
 class AdminController extends Controller
 {
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
-
-        $admin = Admin::where('email', $request->email)->first();
-
-        if (!$admin || !Hash::check($request->password, $admin->password)) {
-            return response()->json(['message' => 'Credenciales incorrectas'], 401);
-        }
-
-        $token = $admin->createToken('AdminToken')->plainTextToken;
-
-        return response()->json(['token' => $token], 200);
-    }
+  
 
     public function index()
     {

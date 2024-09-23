@@ -3,23 +3,14 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class Authenticate
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string|null  $guard
-     * @return mixed
-     */
-    public function handle(Request $request, Closure $next, $guard = null)
+    public function handle($request, Closure $next, ...$guards)
     {
-        if (!Auth::guard($guard)->check()) {
-            return response()->json(['message' => 'No autorizado'], 401);
+        if (!Auth::guard($guards)->check()) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
         }
 
         return $next($request);

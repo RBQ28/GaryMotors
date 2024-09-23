@@ -15,14 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('modelo');
             $table->string('marca');
-            $table->string('categoria'); // Columna para la categoría
+            $table->string('categoria');
             $table->decimal('precio', 8, 2);
             $table->text('descripcion');
             $table->integer('anio');
             $table->integer('cilindrada');
-            $table->string('imagen')->nullable(); // Columna para la imagen
+            $table->binary('imagen')->nullable(); // Usamos 'binary' para almacenar el BLOB
             $table->timestamps();
         });
+        
     }
 
     /**

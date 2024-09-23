@@ -1,5 +1,5 @@
 <?php
-use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Api\AccesorioController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\FormularioContactoController;
@@ -21,21 +21,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Rutas de autenticación para administradores
+Route::prefix('auth/admin')->group(function () {
+    Route::post('/register', [AdminAuthController::class, 'register']); // Registro
+    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login'); // Mostrar formulario de inicio de sesión
+    Route::post('/login', [AdminAuthController::class, 'login']); // Procesar inicio de sesión
 });
 
-Route::middleware([EnsureFrontendRequestsAreStateful::class, 'auth:sanctum'])->group(function () {
-    // Rutas protegidas aquí
-});
 
 // Rutas para Admin
-Route::prefix('admin')->group(function () {
-    Route::post('/login', [AdminController::class, 'login']); // Para el login
+Route::prefix('admin')->group(function () {    
     Route::get('/', [AdminController::class, 'index']);
     Route::post('/', [AdminController::class, 'store']);
     Route::get('{id}', [AdminController::class, 'show']);
-    Route::put('{id}', [AdminController::class, 'update']);  // Corrección aquí
+    Route::middleware('auth:sanctum')->put('{id}', [AdminController::class, 'update']);
     Route::delete('{id}', [AdminController::class, 'destroy']);
 });
 
