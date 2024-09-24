@@ -17,9 +17,10 @@ class AccesorioController extends Controller
 
     // Almacenar un nuevo registro
     public function store(Request $request)
-    {
-         // Validar los datos de entrada
-         $validatedData = $request->validate([
+{
+    try {
+        // Validar los datos de entrada
+        $validatedData = $request->validate([
             'nombre' => 'required|string',
             'tipo_accesorio_id' => 'required|exists:tipo_accesorios,id',
             'descripcion' => 'required|string',
@@ -32,15 +33,21 @@ class AccesorioController extends Controller
         if ($request->hasFile('imagen')) {
             $image = $request->file('imagen');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images', $imageName);
+            $image->storeAs('public/accesorios', $imageName); // Almacenar en la carpeta "accesorios"
             $validatedData['imagen'] = $imageName;
         }
 
         // Crear una nueva instancia de Accesorio   
-        $accesorio  = Accesorio::create($validatedData);
+        $accesorio = Accesorio::create($validatedData);
 
-        return response()->json($accesorio , 201);
+        return response()->json($accesorio, 201);
+    } catch (\Exception $e) {
+        // Capturar cualquier excepción y devolver un mensaje de error
+        return response()->json(['error' => $e->getMessage()], 400);
     }
+}
+
+    
 
     // Mostrar un registro específico
     public function show(string $id)

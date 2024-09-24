@@ -21,7 +21,7 @@ class PiezaController extends Controller
         // Validar los datos de entrada
         $validatedData = $request->validate([
             'nombre' => 'required|string',
-            'tipo_pieza_id' => 'required|exists:tipos_piezas,id',
+            'tipo_pieza_id' => 'nullable|exists:tipos_piezas,id', // Campo opcional
             'descripcion' => 'required|string',
             'precio' => 'required|numeric',
             'stock' => 'required|integer',
@@ -32,8 +32,10 @@ class PiezaController extends Controller
         if ($request->hasFile('imagen')) {
             $image = $request->file('imagen');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images', $imageName);
+            $image->storeAs('public/piezas', $imageName); // Guardar en carpeta "PIEZAS"
             $validatedData['imagen'] = $imageName;
+        } else {
+            $validatedData['imagen'] = null; // Asegurarse de que la imagen sea nullable
         }
 
         // Crear una nueva instancia de Piezas
@@ -54,7 +56,7 @@ class PiezaController extends Controller
         // Validar los datos de entrada
         $validatedData = $request->validate([
             'nombre' => 'required|string',
-            'tipo_pieza_id' => 'required|exists:tipos_piezas,id',
+            'tipo_pieza_id' => 'nullable|exists:tipos_piezas,id', // Campo opcional
             'descripcion' => 'required|string',
             'precio' => 'required|numeric',
             'stock' => 'required|integer',
@@ -68,13 +70,15 @@ class PiezaController extends Controller
         if ($request->hasFile('imagen')) {
             // Eliminar la imagen antigua si existe
             if ($pieza->imagen) {
-                Storage::delete('public/images/' . $pieza->imagen);
+                Storage::delete('public/piezas/' . $pieza->imagen);
             }
 
             $image = $request->file('imagen');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images', $imageName);
+            $image->storeAs('public/piezas', $imageName); // Guardar en carpeta "PIEZAS"
             $validatedData['imagen'] = $imageName;
+        } else {
+            $validatedData['imagen'] = $pieza->imagen; // Mantener la imagen existente si no se subió una nueva
         }
 
         // Actualizar los datos de la pieza
@@ -91,7 +95,7 @@ class PiezaController extends Controller
 
         // Eliminar la imagen si existe
         if ($pieza->imagen) {
-            Storage::delete('public/images/' . $pieza->imagen);
+            Storage::delete('public/piezas/' . $pieza->imagen);
         }
 
         // Eliminar la pieza
